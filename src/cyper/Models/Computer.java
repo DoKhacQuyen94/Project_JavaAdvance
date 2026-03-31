@@ -1,12 +1,12 @@
 package cyper.Models;
 
 public class Computer {
-    private static int ID;
-    private static String Name;
-    private static String zone;
-    private static String text;
-    private static double price_per_hour;
-    private static String status;
+    private int ID;
+    private String Name;
+    private String zone;
+    private String text;
+    private double price_per_hour;
+    private String status;
 
     public Computer() {
     }
@@ -20,7 +20,7 @@ public class Computer {
         this.status = status;
     }
 
-    public static int getID() {
+    public int getID() {
         return ID;
     }
 
@@ -28,7 +28,7 @@ public class Computer {
         this.ID = ID;
     }
 
-    public static String getName() {
+    public String getName() {
         return Name;
     }
 
@@ -36,7 +36,7 @@ public class Computer {
         Name = name;
     }
 
-    public static String getZone() {
+    public String getZone() {
         return zone;
     }
 
@@ -44,7 +44,7 @@ public class Computer {
         this.zone = zone;
     }
 
-    public static String getText() {
+    public String getText() {
         return text;
     }
 
@@ -52,7 +52,7 @@ public class Computer {
         this.text = text;
     }
 
-    public static double getPrice_per_hour() {
+    public double getPrice_per_hour() {
         return price_per_hour;
     }
 
@@ -60,14 +60,14 @@ public class Computer {
         this.price_per_hour = price_per_hour;
     }
 
-    public static String getStatus() {
+    public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
     }
-    public static void displayComputer(){
+    public void displayComputer(){
         System.out.println("Computer ID: " + getID());
         System.out.println("Computer Name: " + getName());
         System.out.println("Computer zone: " + getZone());

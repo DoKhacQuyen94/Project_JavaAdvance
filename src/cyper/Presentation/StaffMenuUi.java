@@ -63,11 +63,11 @@ public class StaffMenuUi {
             return;
         }
         System.out.println("\n" + "-".repeat(60));
-        System.out.printf("| %-5s | %-10s | %-10s | %-15s | %-15s |\n","ID", "Order_ID", "Booking ID", "Tổng tiền", "Thời gian");
+        System.out.printf("| %-5s | %-10s | %-10s | %-15s | %-15s |\n","ID", "User_ID", "Book_ID", "Tổng tiền", "Thời gian");
         System.out.println("-".repeat(60));
         for (Order o : list) {
             System.out.printf("| %-5d | %-10d | %-10d | %-15.0f | %-15s |\n",
-                    o.getId(), o.getBookingId(), o.getTotalPrice(), o.getOrderDate());
+                    o.getId(),o.getUserId(), o.getBookingId(), o.getTotalPrice(), o.getOrderDate());
         }
         System.out.print("\nNhập ID Order đã giao xong (hoặc 0 để quay lại): ");
         int oId = Integer.parseInt(sc.nextLine());

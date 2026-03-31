@@ -23,7 +23,6 @@ public class AdminComputerMenuUi {
             switch(choice){
                 case 1:
                     ComputerDAO.getComputer();
-                    displayComputerTable();
                     break;
                 case 2:
                     addComputer();

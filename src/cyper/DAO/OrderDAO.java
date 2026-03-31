@@ -113,4 +113,44 @@ public class OrderDAO {
         }
         return 0;
     }
+    public void showCustomerOrders(int userId) {
+        // Câu SQL lấy thông tin đơn hàng và tên món ăn tương ứng
+        String sql = "SELECT o.id AS order_id, f.name AS food_name, od.quantity, od.price_at_order, o.status " +
+                "FROM orders o " +
+                "JOIN order_details od ON o.id = od.order_id " +
+                "JOIN foods f ON od.food_id = f.id " +
+                "WHERE o.user_id = ? AND o.status IN ('pending', 'delivered') " +
+                "ORDER BY o.order_date DESC";
+
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            System.out.println("\n--- TRẠNG THÁI ĐƠN HÀNG CỦA BẠN ---");
+            System.out.printf("| %-8s | %-15s | %-5s | %-12s | %-12s |\n", "Mã Đơn", "Tên Món", "SL", "Giá", "Trạng Thái");
+            System.out.println("-".repeat(65));
+
+            boolean hasOrder = false;
+            while (rs.next()) {
+                hasOrder = true;
+                String status = rs.getString("status");
+                // Việt hóa trạng thái cho thân thiện
+                String displayStatus = status.equals("pending") ? "Đang chờ" : "Đã giao";
+
+                System.out.printf("| %-8d | %-15s | %-5d | %-12.0f | %-12s |\n",
+                        rs.getInt("order_id"), rs.getString("food_name"),
+                        rs.getInt("quantity"), rs.getDouble("price_at_order"), displayStatus);
+            }
+
+            if (!hasOrder) {
+                System.out.println(">>> Bạn hiện không có đơn hàng nào đang xử lý.");
+            }
+            System.out.println("-".repeat(65));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

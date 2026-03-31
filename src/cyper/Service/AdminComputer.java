@@ -8,8 +8,7 @@ import java.util.Scanner;
 
 public class AdminComputer {
     static Scanner sc = new Scanner(System.in);
-    public static void displayComputerTable() {
-        List<Computer> list = ComputerDAO.computers;
+    public static void displayComputerTable(List<Computer> list) {
         System.out.println("--------------------------------------------------------------------------------------------------------------------");
         System.out.printf("| %-3s | %-20s | %-10s | %-20s | %-8s | %-20s | \n", "ID", "Tên máy", "Phòng", "Mô tả", "Giá tiền/ giờ","Trạng thái");
         System.out.println("--------------------------------------------------------------------------------------------------------------------");

@@ -57,4 +57,28 @@ public class UserDAO {
         }
 
     }
+    public static boolean updateBalance(int userId, double amount) {
+        // amount > 0 là nạp tiền, amount < 0 là trừ tiền
+        String sql = "UPDATE users SET balance = balance + ? WHERE id = ?";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, amount);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public double getBalance(int userId) {
+        String sql = "SELECT balance FROM users WHERE id = ?";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getDouble("balance");
+        } catch (SQLException e) { e.printStackTrace(); }
+        return 0;
+    }
 }

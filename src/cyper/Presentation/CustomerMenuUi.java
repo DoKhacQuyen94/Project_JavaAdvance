@@ -3,6 +3,7 @@ package cyper.Presentation;
 import cyper.DAO.BookingDAO;
 import cyper.DAO.ComputerDAO;
 import cyper.DAO.FoodDAO;
+import cyper.DAO.UserDAO;
 import cyper.Models.Computer;
 import cyper.Models.Food;
 import cyper.Models.OrderDetail;
@@ -10,6 +11,7 @@ import cyper.Models.User;
 import cyper.Service.AdminFoodMenu;
 import cyper.Service.BookingService;
 import cyper.Service.OrderService;
+import cyper.Service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,8 @@ public class CustomerMenuUi {
             System.out.println("1. Xem danh sách máy trống");
             System.out.println("2. Đặt máy chơi (Gửi yêu cầu duyệt)");
             System.out.println("3. Gọi đồ ăn & Thức uống");
+            System.out.println("4. Xem trạng thái đơn order");
+            System.out.println("5. Ví Nội bộ");
             System.out.println("0. Đăng xuất");
             System.out.print("Lựa chọn của bạn: ");
             String choice = sc.nextLine();
@@ -37,6 +41,8 @@ public class CustomerMenuUi {
                 case "1": showAvailablePCs(); break;
                 case "2": handleBooking(); break;
                 case "3": handleOrderFood(); break;
+                case "4": handleViewOrders(); break;
+                case "5": handleWallet(user); break;
                 case "0":
                     String billSummary = bookingService.endSession(currentUser.getID());
                     System.out.println("\n===============================");
@@ -107,6 +113,34 @@ public class CustomerMenuUi {
                 String result = orderService.placeOrder(currentUser.getID(), bId, cart);
                 System.out.println(">>> " + result);
             }
+        }
+    }
+    private static void handleViewOrders() {
+        System.out.println("Đang tải danh sách đơn hàng của bạn...");
+        orderService.viewMyOrders(currentUser.getID());
+    }
+    private static void handleWallet(User user) {
+        System.out.println("\n======= VÍ ĐIỆN TỬ NỘI BỘ =======");
+        UserService.showWallet(currentUser.getID());
+        System.out.println("1. Nạp tiền");
+        System.out.println("0. Quay lại");
+        int choice = sc.nextInt();
+        switch (choice) {
+            case 1:
+                System.out.print("Nhập số tiền cần nạp: ");
+                int balance = sc.nextInt();
+                if(balance < 0) {
+                    System.out.print("Không được nhập số âm");
+                    return;
+                }
+                boolean check= UserDAO.updateBalance(user.getID(), balance);
+                if(check){
+                    System.out.println("Nạp tiền thành công");
+                    sc.nextLine();
+                }
+                break;
+            default:
+                System.out.println("Lựa chọn không hợp lệ");
         }
     }
 

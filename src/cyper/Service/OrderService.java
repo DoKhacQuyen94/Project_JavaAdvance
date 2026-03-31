@@ -25,4 +25,8 @@ public class OrderService {
         boolean success = orderDAO.createOrder(order, cart);
         return success ? "SUCCESS: Đơn hàng đã được gửi đi." : "LỖI: Đặt món thất bại!";
     }
+    public void viewMyOrders(int userId) {
+        // Có thể thêm logic kiểm tra User có tồn tại không ở đây
+        orderDAO.showCustomerOrders(userId);
+    }
 }

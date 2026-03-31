@@ -1,6 +1,7 @@
 package cyper.DAO;
 
 import cyper.Models.Computer;
+import cyper.Service.AdminComputer;
 import cyper.util.DBContext;
 
 import java.sql.Connection;
@@ -35,6 +36,7 @@ public class ComputerDAO {
                 computer.setStatus(rs.getString("status"));
                 computers.add(computer);
             }
+            AdminComputer.displayComputerTable(computers);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
