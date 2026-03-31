@@ -18,11 +18,16 @@ public class Main {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             user = AuthMenuUi.auth();
+            if (user == null){
+                System.out.println("Bạn đã thoát");
+                return;
+            }
             if(user.getROLE().equals("admin")){
                 do{
                     System.out.println("=====Admin manager=====");
                     System.out.println("1. Quản lý máy trạm");
                     System.out.println("2. Quản lý Menu F&B");
+                    System.out.println("3. Thoát");
                     System.out.print("Nhập lựa chọn của bạn: ");
                     choice = sc.nextInt();
                     sc.nextLine();

@@ -101,4 +101,16 @@ public class OrderDAO {
             return false;
         }
     }
+    public static double getTotalFoodMoney(int bookingId) {
+        String sql = "SELECT SUM(total_price) as total FROM orders WHERE booking_id = ? AND status IN ('delivered', 'paid')";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getDouble("total");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

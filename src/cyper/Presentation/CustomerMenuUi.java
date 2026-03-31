@@ -37,7 +37,11 @@ public class CustomerMenuUi {
                 case "1": showAvailablePCs(); break;
                 case "2": handleBooking(); break;
                 case "3": handleOrderFood(); break;
-                case "0": return;
+                case "0":
+                    String billSummary = bookingService.endSession(currentUser.getID());
+                    System.out.println("\n===============================");
+                    System.out.println(billSummary);
+                    return;
                 default: System.out.println(">>> Lỗi: Lựa chọn không hợp lệ!");
             }
         }
@@ -77,13 +81,11 @@ public class CustomerMenuUi {
         System.out.println(">>> Hệ thống ghi nhận bạn đang ngồi máy. Đang chuẩn bị menu...");
         List<OrderDetail> cart = new ArrayList<>();
         double tempTotal = 0;
-
         while (true) {
             new AdminFoodMenu().displayFoodTable();
             System.out.print("Nhập ID món (0 để CHỐT ĐƠN): ");
             int fId = Integer.parseInt(sc.nextLine());
             if (fId == 0) break;
-
             Food f = foodDAO.getFoodById(fId);
             if (f == null) {
                 System.out.println(">>> Lỗi: Món không tồn tại!");
@@ -91,8 +93,6 @@ public class CustomerMenuUi {
             }
             System.out.print("Nhập số lượng: ");
             int qty = Integer.parseInt(sc.nextLine());
-
-            // Lưu vào danh sách chi tiết (Tầng trung gian)
             OrderDetail item = new OrderDetail(0, 0, fId, qty, f.getPrice());
             cart.add(item);
             tempTotal += f.getPrice() * qty;

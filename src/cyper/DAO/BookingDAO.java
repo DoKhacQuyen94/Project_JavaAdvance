@@ -72,26 +72,48 @@ public class BookingDAO {
         } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
-    // 4. Kết thúc phiên chơi (Checkout)
-    public boolean completeBooking(int bookingId, int computerId, double totalAmount) {
-        String sqlComplete = "UPDATE bookings SET status = 'completed', end_time = NOW(), total_amount = ? WHERE id = ?";
-        String sqlAvailable = "UPDATE computers SET status = 'available' WHERE id = ?";
+    public Booking getBookingWithPrice(int userId) {
+        String sql = "SELECT b.*, c.price_per_hour FROM bookings b " +
+                "JOIN computers c ON b.computer_id = c.id " +
+                "WHERE b.user_id = ? AND b.status = 'active' LIMIT 1";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Booking b = new Booking();
+                b.setId(rs.getInt("id"));
+                b.setComputerId(rs.getInt("computer_id"));
+                b.setStartTime(rs.getTimestamp("start_time"));
+                // Lưu tạm price_per_hour vào một biến hoặc dùng trực tiếp trong Service
+                return b;
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return null;
+    }
+    public boolean checkout(int bookingId, int computerId, double totalAmount) {
+        String sqlBooking = "UPDATE bookings SET status = 'completed', end_time = NOW(), total_amount = ? WHERE id = ?";
+        String sqlComputer = "UPDATE computers SET status = 'available' WHERE id = ?";
+
         Connection conn = null;
         try {
             conn = DBContext.getConnection();
             conn.setAutoCommit(false);
-            try (PreparedStatement ps1 = conn.prepareStatement(sqlComplete);
-                 PreparedStatement ps2 = conn.prepareStatement(sqlAvailable)) {
+            try (PreparedStatement ps1 = conn.prepareStatement(sqlBooking);
+                 PreparedStatement ps2 = conn.prepareStatement(sqlComputer)) {
+
                 ps1.setDouble(1, totalAmount);
                 ps1.setInt(2, bookingId);
                 ps1.executeUpdate();
+
                 ps2.setInt(1, computerId);
                 ps2.executeUpdate();
+
                 conn.commit();
                 return true;
             }
         } catch (SQLException e) {
-            if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
+            if (conn != null) try { conn.rollback(); } catch (Exception ex) {}
             return false;
         }
     }

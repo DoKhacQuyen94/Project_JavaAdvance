@@ -14,7 +14,7 @@ public class AdminComputer {
         System.out.printf("| %-3s | %-20s | %-10s | %-20s | %-8s | %-20s | \n", "ID", "Tên máy", "Phòng", "Mô tả", "Giá tiền/ giờ","Trạng thái");
         System.out.println("--------------------------------------------------------------------------------------------------------------------");
         for (Computer f : list) {
-            System.out.printf("| %-3d | %-20s | %-10.2s | %-20s | %-8f | %-20s |\n",
+            System.out.printf("| %-3d | %-20s | %-10s | %-20s | %-8.2f | %-20s |\n",
                     f.getID(), f.getName(), f.getZone(), f.getText(), f.getPrice_per_hour(),f.getStatus());
         }
         System.out.println("---------------------------------------------------------------------------");
